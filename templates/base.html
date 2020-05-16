@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sequence info</title>
+    <link rel="stylesheet" href="/static/theme.css">
+</head>
+<body>
+    <h1>Find out what type your sequence is!</h1>
+    <hr>
+    <form method="get">
+        <p>
+            <label>Enter your sequence:
+                <input type="text" name="sequence">
+            </label>
+            <button type="submit">Submit</button>
+        </p>
+    </form>
+    <h4><i>Note:</i> if sequence is a protein sequence, a BLAST will start. BLAST-ing may take a while...</h4>
+    <hr>
+    <h1>Results</h1>
+    Sequence type: {{ sequence_type }}
+    <br>
+    Sequence: {{ sequence }}
+    <p>
+        {% if sequence_type=="DNA sequence" %}
+        Transcribed RNA sequence (assuming that given sequence is coding sequence): {{ rna_sequence }}
+        <br>
+        Protein sequence (translated from given DNA Sequence, also assuming that given sequence is coding sequence): {{ protein_sequence }}
+        <br>
+        {% endif %}
+        {% if warning %}
+            <b>{{ warning }}</b>
+        {% endif %}
+    </p>
+        {% if sequence_type=="Protein sequence" %}
+        <hr>
+        <h1>BLAST finished. Results:</h1>
+        <p>
+            The following accession codes were found (limited to 10 accession codes, ordered by lowest E-value):
+        </p>
+            {% for acc_code in acc_code_list %}
+            <ul>
+            <li> {{ acc_code }}</li>
+            </ul>
+        {% endfor %}
+        <p>
+            Search on NCBI for more information about your sequence.
+        </p>
+        {% endif %}
+</body>
+</html>
